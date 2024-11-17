@@ -1,3 +1,14 @@
 {
-    "Currency" : "USD"
+  "Currency": "USD",
+  "AIbool": true,
+  "AI": {
+    "Chatgtp": {
+      "Enabled": false,
+      "Version": null
+    },
+    "Ollama": {
+      "Enabled": true,
+      "Version": "llama3.1"
+    }
+  }
 }

@@ -13,6 +13,15 @@ const db = new sqlite.Database("database.db", (err) => {
 export function SetupDb() {
   db.serialize(() => {
     db.run(`
+      DROP TABLE IF EXISTS websites;
+    `);
+    db.run(`
+      DROP TABLE IF EXISTS product;
+    `);
+    db.run(`
+      DROP TABLE IF EXISTS ProductOpWebsite;
+    `);
+    db.run(`
       CREATE TABLE IF NOT EXISTS websites (
         Id INTEGER PRIMARY KEY AUTOINCREMENT,
         Naam VARCHAR(50)
