@@ -46,7 +46,15 @@ export function SetupDb() {
         FOREIGN KEY (websiteId) REFERENCES websites(Id)
       );
     `);
-
+    
+    db.run(`
+      CREATE TABLE ModuleWebsite(
+	      Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+        Path VARCHAR(40),
+        websiteId INT UNSIGNED,
+        CONSTRAINT FK_ModuleWebsite_Website FOREIGN KEY (websiteId) REFERENCES websites(Id)
+      );
+    `);
     console.log("Database setup completed successfully.");
   });
 }
