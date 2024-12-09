@@ -13,7 +13,6 @@ CREATE TABLE product(
 CREATE TABLE ProductOpWebsite(
 	Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     URL VARCHAR(700),
-	prijs DOUBLE UNSIGNED ,
     productId INT UNSIGNED,
     websiteId INT UNSIGNED,
     CONSTRAINT FK_ProductOpWebsite_Product FOREIGN KEY (productId) REFERENCES product(Id),
@@ -25,6 +24,12 @@ CREATE TABLE QuerySelectorValue(
     Value_Selector_Sub VARCHAR(20),
 	websiteId INT UNSIGNED,
     CONSTRAINT FK_QuerySelectorValue_Website FOREIGN KEY (websiteId) REFERENCES websites(Id)
+);
+CREATE TABLE Record(
+    prijs DOUBLE UNSIGNED,
+    DateRecord DATE
+    ProductOpWebsiteId INT UNSIGNED,
+    CONSTRAINT FK_ProductOpWebsite_Record FOREIGN KEY (ProductOpWebsiteId) REFERENCES ProductOpWebsite(Id)
 );
 CREATE TABLE ModuleWebsite(
 	Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
