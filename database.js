@@ -109,9 +109,9 @@ export function InsertTestData() {
       });
     });
   }
-  export function ReturnRecord() {
+  export function ReturnRecord(id) {
     return new Promise((resolve, reject) => {
-      db.all("SELECT * FROM Record;", (err, rows) => {
+      db.all(`SELECT * FROM Record WHERE Id = ${id};`, (err, rows) => {
         if (err) {
           console.error("Error executing query:", err.message);
           reject(err);
@@ -136,6 +136,18 @@ export function InsertTestData() {
   export function ReturnWebsite() {
     return new Promise((resolve, reject) => {
       db.all("SELECT * FROM websites;", (err, rows) => {
+        if (err) {
+          console.error("Error executing query:", err.message);
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  }
+  export function Returnrecords(){
+    return new Promise((resolve, reject) => {
+      db.all("SELECT * FROM record;", (err, rows) => {
         if (err) {
           console.error("Error executing query:", err.message);
           reject(err);

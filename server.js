@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { LogResults, Insertproduct, Insertwebsite,InsertNewRecord, ReturnProduct, ReturnWebsite, ReturnRecord } from "./database.js"
+import { LogResults, Insertproduct, Insertwebsite,InsertNewRecord, ReturnProduct, ReturnWebsite, Returnrecords, ReturnRecord } from "./database.js"
 import config from "./config.json" assert {type : "json"};
 const app = express();
 app.use(cors());
@@ -38,7 +38,20 @@ app.post('/record', async (req, res) => {
     res.send('OK');
 })
 app.get('/record', async (req, res) => {
-    const rows = await ReturnRecord();
+    const { IdRecord } = req.body;
+    const rows = await ReturnRecord(IdRecord);
+    res.send(rows);
+})
+app.get(`/record:id`, async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({ error: 'Id is required' });
+    }
+    const rows = await ReturnRecord(id);
+    res.json(rows);
+})
+app.get('/records', async (req, res) => {
+    const rows = await Returnrecords();
     res.send(rows);
 })
 app.get('/favicon.ico', (req, res) => res.status(204)); // No Content
