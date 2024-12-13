@@ -172,6 +172,57 @@ export function InsertTestData() {
 function returndateformat(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
+export function ResertDatabase() {
+return new Promise((resolve, reject) => {
+  db.serialize(() => {
+    db.run("DELETE FROM websites;", (err) => {
+      if (err) {
+        console.error(`Error deleting websites: ${err}`);
+        reject(err);
+      } else {
+        console.log('websites deleted successfully');
+        resolve();
+      }
+    });
+    db.run("DELETE FROM product;", (err) => {
+      if (err) {
+        console.error(`Error deleting products: ${err}`);
+        reject(err);
+      } else {
+        console.log('products deleted successfully');
+        resolve();
+      }
+    });
+    db.run("DELETE FROM ProductOpWebsite;", (err) => {
+      if (err) {
+        console.error(`Error deleting ProductOpWebsites: ${err}`);
+        reject(err);
+      } else {
+        console.log('ProductOpWebsites deleted successfully');
+        resolve();
+      }
+    });
+    db.run("DELETE FROM ModuleWebsite;", (err) => {
+      if (err) {
+        console.error(`Error deleting ModuleWebsites: ${err}`);
+        reject(err);
+      } else {
+        console.log('ModuleWebsite deleted successfully');
+        resolve();
+      }
+    });
+    db.run("DELETE FROM Record;", (err) => {
+      if (err) {
+        console.error(`Error deleting Records: ${err}`);
+        reject(err);
+      } else {
+        console.log('Records deleted successfully');
+        resolve();
+      }
+    });
+  });
+});
+}
 // SetupDb();
 // setTimeout(() => {
 //   InsertTestData();

@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { LogResults, Insertproduct, Insertwebsite,InsertNewRecord, ReturnProduct, ReturnWebsite, Returnrecords, ReturnRecord } from "./database.js"
+import { LogResults, Insertproduct, Insertwebsite,InsertNewRecord, ReturnProduct, ReturnWebsite, Returnrecords, ReturnRecord, ResertDatabase } from "./database.js"
 import config from "./config.json" assert {type : "json"};
 const app = express();
 app.use(cors());
@@ -54,6 +54,10 @@ app.get('/records', async (req, res) => {
     const rows = await Returnrecords();
     res.send(rows);
 })
+app.get('/ResetDatabase', async (req, res) => {    
+    const rows = await ResertDatabase();
+    res.send('OK'); 
+});
 app.get('/favicon.ico', (req, res) => res.status(204)); // No Content
 app.listen(3000);
 console.log("Server started on port http://localhost:3000");
