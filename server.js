@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { LogResults, Insertproduct, Insertwebsite,InsertNewRecord, ReturnProduct, ReturnWebsite, Returnrecords, ReturnRecord, ResertDatabase } from "./database.js"
+import { LogResults, Insertproduct, Insertwebsite,InsertNewRecord, ReturnProduct, ReturnWebsite, Returnrecords, ReturnRecordById, ResertDatabase, ReturnProductOpWebsite, Insertproductopwebsite, ReturnrecordsFull} from "./database.js"
 import config from "./config.json" assert {type : "json"};
 const app = express();
 app.use(cors());
@@ -16,8 +16,13 @@ app.get('/table', async (req, res) => {
 })
 app.post('/product', async (req, res) => {
     const { name } = req.body;
+    if(name === null){
+        res.status(400).json({error : "Body is empty"});
+    }
+    else{
     Insertproduct(name);
     res.send('OK');
+    }
 })
 app.get('/product', async (req, res) => {
     const rows = await ReturnProduct();
@@ -25,8 +30,12 @@ app.get('/product', async (req, res) => {
 })
 app.post('/website', async (req, res) => {
     const { name } = req.body;
-    Insertwebsite(name);
-    res.send('OK');
+    if(name === null){
+        res.status(400).json({error : "Body is empty"});
+    }else{
+        Insertwebsite(name);
+        res.send('OK');
+    }
 })
 app.get('/website', async (req, res) => {
     const rows = await ReturnWebsite();
@@ -34,25 +43,43 @@ app.get('/website', async (req, res) => {
 })
 app.post('/record', async (req, res) => {
     const { IdProductOnWebsite, Prijs } = req.body;
-    InsertNewRecord(IdProductOnWebsite, Prijs);
-    res.send('OK');
+    if(IdProductOnWebsite === null || Prijs === null){
+        return res.status(400).json({ error: 'Given body data is empty' });
+    }
+    else{
+        InsertNewRecord(IdProductOnWebsite, Prijs);
+        res.send('OK');
+    }
 })
-app.get('/record', async (req, res) => {
-    const { IdRecord } = req.body;
-    const rows = await ReturnRecord(IdRecord);
-    res.send(rows);
-})
-app.get(`/record:id`, async (req, res) => {
+app.get(`/recordid:id`, async (req, res) => {
     const { id } = req.params;
     if (!id) {
         return res.status(400).json({ error: 'Id is required' });
     }
-    const rows = await ReturnRecord(id);
+    const rows = await ReturnRecordById(id);
     res.json(rows);
 })
 app.get('/records', async (req, res) => {
     const rows = await Returnrecords();
     res.send(rows);
+})
+app.get('/recordsfull', async (req, res) => {
+    const rows = await ReturnrecordsFull();
+    res.send(rows);
+})
+app.get('/ProductOpWebsite', async (req, res) => {
+    const rows = await ReturnProductOpWebsite();
+    res.send(rows);
+})
+app.post('/ProductOpWebsite', async (req, res) => {
+    const {IdProduct, IdWebsite, UrlProductOpWebsite} = req.body;
+    if(IdProduct === null || IdWebsite === null || UrlProductOpWebsite === null){
+        res.status(400).json({error : "Given input is empty"});
+    }
+    else{
+    Insertproductopwebsite(IdProduct, IdWebsite, UrlProductOpWebsite);
+    res.send('OK');
+    }
 })
 app.get('/ResetDatabase', async (req, res) => {    
     const rows = await ResertDatabase();

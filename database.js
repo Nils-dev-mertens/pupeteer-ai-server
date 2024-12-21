@@ -1,4 +1,5 @@
 import { error } from "console";
+import { promises } from "dns";
 import sqlite3 from "sqlite3";
 const sqlite = sqlite3.verbose();
 
@@ -94,8 +95,31 @@ export function InsertTestData() {
   export function Insertwebsite(Naam){
     db.run(`INSERT INTO websites (Naam) VALUES("${Naam}")`);
   } 
-  export function Insertproductopwebsite(params) {
-    
+  export function Insertproductopwebsite(IdProduct, IdWebsite, Url) {
+    return new Promise((resolve, reject) => {
+      const query = `INSERT INTO ProductOpWebsite(productId, websiteId, URL) VALUES(?, ?, ?)`;
+      db.run(query, [IdProduct, IdWebsite, Url], function (err) {
+          if (err) {
+              console.error("Error inserting ProductOpWebsite:", err);
+              reject(err);
+          } else {
+              console.log("ProductOpWebsite inserted successfully");
+              resolve("succes");
+          }
+      });
+    });
+  }
+  export function ReturnProductOpWebsite() {
+    return new Promise((resolve, reject) => {
+      db.all("SELECT * FROM ProductOpWebsite;", (err, rows) => {
+        if (err) {
+          console.error("Error executing query:", err.message);
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
   }
   export function LogResults() {
     return new Promise((resolve, reject) => {
@@ -109,7 +133,7 @@ export function InsertTestData() {
       });
     });
   }
-  export function ReturnRecord(id) {
+  export function ReturnRecordById(id) {
     return new Promise((resolve, reject) => {
       db.all(`SELECT * FROM Record WHERE Id = ${id};`, (err, rows) => {
         if (err) {
@@ -148,6 +172,18 @@ export function InsertTestData() {
   export function Returnrecords(){
     return new Promise((resolve, reject) => {
       db.all("SELECT * FROM record;", (err, rows) => {
+        if (err) {
+          console.error("Error executing query:", err.message);
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  }
+  export function ReturnrecordsFull(){
+    return new Promise((resolve, reject) => {
+      db.all("SELECT Prijs, Daterecord, Url FROM record LEFT JOIN ProductOpWebsite ON record.ProductOpWebsiteId = ProductOpWebsite.Id;", (err, rows) => {
         if (err) {
           console.error("Error executing query:", err.message);
           reject(err);
