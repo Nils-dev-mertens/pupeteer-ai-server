@@ -1,5 +1,6 @@
 import { error } from "console";
 import { promises } from "dns";
+import { resolve } from "path";
 import sqlite3 from "sqlite3";
 const sqlite = sqlite3.verbose();
 
@@ -205,6 +206,92 @@ export function InsertTestData() {
         }
     });
 }
+export function DeleteProduct(id) {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run(
+        `DELETE FROM Record WHERE ProductOpWebsiteId = (SELECT id FROM ProductOpWebsite WHERE productId = ${id})`,
+        (err) => {
+          if (err) {
+            console.error(`Error inserting product: ${err}`);
+            reject(err);
+          } else {
+            console.log('records deleted successfully');
+            resolve();
+          }
+        }
+      );
+      db.run(
+        `DELETE FROM ProductOpWebsite WHERE productId = ${id}`,
+        (err) => {
+          if (err) {
+            console.error(`Error inserting product: ${err}`);
+            reject(err);
+          } else {
+            console.log('productopwebsite deleted successfully');
+            resolve();
+          }
+        }
+      );
+      db.run(
+        `DELETE FROM product WHERE Id = ${id}`,
+        (err) => {
+          if (err) {
+            console.error(`Error inserting product: ${err}`);
+            reject(err);
+          } else {
+            console.log('product deleted successfully');
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+export function DeleteWebsite(id) {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run(
+        `DELETE FROM Record WHERE ProductOpWebsiteId = (SELECT id FROM ProductOpWebsite WHERE websiteId = ${id})`,
+        (err) => {
+          if (err) {
+            console.error(`Error deleting records: ${err}`);
+            reject(err);
+          } else {
+            console.log('records deleted successfully');
+            resolve();
+          }
+        }
+      );
+      db.run(
+        `DELETE FROM ProductOpWebsite WHERE websiteId = ${id}`,
+        (err) => {
+          if (err) {
+            console.error(`Error deleting product-op-website: ${err}`);
+            reject(err);
+          } else {
+            console.log('product-op-website deleted successfully');
+            resolve();
+          }
+        }
+      );
+      db.run(
+        `DELETE FROM websites WHERE Id = ${id}`,
+        (err) => {
+          if (err) {
+            console.error(`Error deleting website: ${err}`);
+            reject(err);
+          } else {
+            console.log('website deleted successfully');
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
 function returndateformat(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }

@@ -1,3 +1,7 @@
-export function returnwholeprice(whole, sub) {
-    return(""+whole + sub + "")
-}
+export default {
+    returnwholeprice: (whole, sub) => {
+      if (!whole || !sub) return null;
+      return `${whole}${sub}`;
+    },
+  };
+  
