@@ -15,8 +15,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.1",
+    "fs": "^0.0.1-security",
     "inquirer": "^12.1.0",
-    "ollama": "^0.5.10",
+    "ollama": "^0.5.11",
     "puppeteer": "^23.8.0",
     "sqlite3": "^5.1.7"
   },
