@@ -13,6 +13,7 @@ function GetAi() {
 function GetParams(){}
 
 async function CreateModule(whole,sub,namecompany) {
+    const configai = GetAi();
     function genname(namecompany) {
         const namesplit = namecompany.split(" ");
         if(namesplit.length > 1 && namecompany != undefined){
@@ -27,7 +28,7 @@ async function CreateModule(whole,sub,namecompany) {
     }
     async function CreateLogicModule() {
         const response = await ollama.chat({
-            model: 'llama3.1',
+            model: configai.version,
             messages: [{ role: 'user', content: `Create a js fucntion that starts with export default {returnwholeprice: (whole, sub) that returns the price like 69.95 whole is given as ${whole} and sub as ${sub}. give only the function back as response` }],
           })
           return response.message.content;
