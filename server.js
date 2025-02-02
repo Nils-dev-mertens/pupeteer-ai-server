@@ -16,6 +16,10 @@ app.get('/routes', async(req, res) => {
         "product" : {
             "link" : "http://localhost:3000/product",
             "description" : "returns products"
+        },
+        "product" : {
+            "link" : "http://localhost:3000/product",
+            "description" : "returns products"
         }
     });
 });

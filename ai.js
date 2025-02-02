@@ -33,8 +33,12 @@ async function CreateModule(whole,sub,namecompany) {
           return response.message.content;
     }
     const logic = await CreateLogicModule();
-    const logicfunc = await logic.split("```")[0];
-    console.log(logicfunc);
-    fs.writeFile(`modules/${genname(namecompany)}.js`, `${await logic}`);
+    const logictextsplit = logic.split('\n');
+    const logictext = logictextsplit.slice(1,logictextsplit.length - 1);
+    let output = "";
+    logictext.forEach(element => {
+        output += element;
+    });
+    console.log(output);
+    fs.writeFile(`modules/${genname(namecompany)}.js`, `${output}`);
 }
-CreateModule(99,60,"bol . com");
