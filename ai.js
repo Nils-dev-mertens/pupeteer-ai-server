@@ -10,13 +10,32 @@ function GetAi() {
         return null;
     }
 }
-function GetParams(){}
+async function GetParams(htmlin){
+    const configai = GetAi();
+    async function Givewholequery(html) {
+        const response = await ollama.chat({
+            model: configai.version,
+            messages: [{ role: 'user', content: `Create the cssqueryselector for the first part of a price so the full numbers of ...,... you are given the html ${html}. only return the queryselector` }],
+          })
+          return response.message.content;
+    }
+    async function Givesubquery(html) {
+        const response = await ollama.chat({
+            model: configai.version,
+            messages: [{ role: 'user', content: `Create the cssqueryselector for the last part of a price so the cents of ...,... you are given the html ${html}. only return the queryselector` }],
+          })
+          return response.message.content;
+    }
+    const wholeselector = await Givewholequery(htmlin);
+    const subselector = await Givesubquery(htmlin);
+    return [await wholeselector, await subselector];
+}
 
 async function CreateModule(whole,sub,namecompany) {
     const configai = GetAi();
     function genname(namecompany) {
         const namesplit = namecompany.split(" ");
-        if(namesplit.length > 1 && namecompany != undefined){
+        if(namesplit.length >= 1 && namecompany != undefined){
             let namegenfun = "";
             namesplit.forEach(element => {
                 if(element != "."){
@@ -29,7 +48,7 @@ async function CreateModule(whole,sub,namecompany) {
     async function CreateLogicModule() {
         const response = await ollama.chat({
             model: configai.version,
-            messages: [{ role: 'user', content: `Create a js fucntion that starts with export default {returnwholeprice: (whole, sub) that returns the price like 69.95 whole is given as ${whole} and sub as ${sub}. give only the function back as response` }],
+            messages: [{ role: 'user', content: `Create a JavaScript module that exports an object with a method named returnwholeprice. This method takes two parameters: whole ${whole}(a number representing the whole part of a price) and sub (a number representing the fractional part)like ${sub}. It should return a string formatted as {whole},{sub}. Ensure the function is concise and correctly structured for ES6 module export. only return the js function nothing else` }],
           })
           return response.message.content;
     }
@@ -43,3 +62,4 @@ async function CreateModule(whole,sub,namecompany) {
     console.log(output);
     fs.writeFile(`modules/${genname(namecompany)}.js`, `${output}`);
 }
+// CreateModule("20 \n", "  30", "damm");
