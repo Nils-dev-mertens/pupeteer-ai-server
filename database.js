@@ -4,7 +4,7 @@ import { resolve } from "path";
 import sqlite3 from "sqlite3";
 const sqlite = sqlite3.verbose();
 
-const db = new sqlite.Database("database.db", (err) => {
+const db = new sqlite.Database("database2.db", (err) => {
   if (err) {
     console.error("Error connecting to the database:", err.message);
   } else {
